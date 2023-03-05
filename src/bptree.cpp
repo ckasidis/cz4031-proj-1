@@ -940,7 +940,7 @@ int *BPTree::search(int lowKey, int highKey, Storage &disk)
     std::cout << std::endl
               << "--- Summary ---" << std::endl;
     std::cout << "Running time of search: " << runningTime.count() << " microseconds" << std::endl;
-    std::cout << "Number of data blocks accesses: " << recordCount << std::endl;
+    std::cout << "Number of record accesses: " << recordCount << std::endl;
     std::cout << "Average avgRating of the records: " << float(totalRating / (float)recordCount) << std::endl;
 
     return result;
