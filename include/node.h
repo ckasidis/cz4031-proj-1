@@ -11,7 +11,8 @@ struct Address
     // 8 Bytes
     void *blockAddress;
     // 4 Bytes
-    unsigned short int offset;
+    // unsigned short int offset;
+    unsigned int offset;
 
 public:
     Node *getAddressNode()

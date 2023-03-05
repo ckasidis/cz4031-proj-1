@@ -109,6 +109,22 @@ int main() {
     std::cout << "Number of data blocks accesses: " << *(result + 1) << std::endl;
     std::cout << std::endl << std::endl;
 
+    disk.resetBlocksAccessed();
+
+    auto startTime = std::chrono::high_resolution_clock::now();
+    for (unsigned int i=0; i < (BLOCKSIZE * disk.getNumBlocksForRecords()); i+= sizeof(Record)) {
+        Record* diskIterator = (Record *)disk.load({disk.getStoragePtr(), i }, sizeof(Record));
+        if (diskIterator->numVotes == 500) {
+            break;
+        }
+    }
+    auto endTime = std::chrono::high_resolution_clock::now();
+    auto runningTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+    std::cout << std::endl
+              << "Running time of brute-force linear scan : " << runningTime.count() << "microseconds" << std::endl;
+
+    std::cout << "Number of blocks accessed: " << disk.getNumBlocksAccessed()/10 << std::endl;
+
     //////////////////
     // Experiment 4 //
     //////////////////
@@ -123,12 +139,43 @@ int main() {
     std::cout << "Number of data blocks accessed: " << *(result4 + 1) << std::endl;
     std::cout << std::endl << std::endl;
 
+    disk.resetBlocksAccessed();
+
+    auto startTime1 = std::chrono::high_resolution_clock::now();
+    for (unsigned int i=0; i < (BLOCKSIZE * disk.getNumBlocksForRecords()); i+= sizeof(Record)) {
+        Record* diskIterator = (Record *)disk.load({disk.getStoragePtr(), i }, sizeof(Record));
+        if (diskIterator->numVotes == 40000) {
+            break;
+        }
+    }
+    auto endTime1 = std::chrono::high_resolution_clock::now();
+    auto runningTime1 = std::chrono::duration_cast<std::chrono::microseconds>(endTime1 - startTime1);
+    std::cout << std::endl
+              << "Running time of brute-force linear scan : " << runningTime1.count() << "microseconds" << std::endl;
+    std::cout << "Number of blocks accessed: " << disk.getNumBlocksAccessed()/10 << std::endl;
+
     //////////////////
     // Experiment 5 //
     //////////////////
     std::cout << "##### Experiment 5 #####" << std::endl;
     std::cout << "Deleting records with numVotes = 1000..." << std::endl;
     std::cout << std::endl;
+
+    disk.resetBlocksAccessed();
+    auto startTime2 = std::chrono::high_resolution_clock::now();
+    for (unsigned int i=0; i < (BLOCKSIZE * disk.getNumBlocksForRecords()); i+= sizeof(Record)) {
+        Record* diskIterator = (Record *)disk.load({disk.getStoragePtr(), i }, sizeof(Record));
+        if (diskIterator->numVotes == 1000) {
+            break;
+        }
+    }
+
+    auto endTime2 = std::chrono::high_resolution_clock::now();
+    auto runningTime2 = std::chrono::duration_cast<std::chrono::microseconds>(endTime2 - startTime2);
+    std::cout << std::endl
+              << "Running time of brute-force linear scan : " << runningTime2.count() << "microseconds" << std::endl;
+
+    std::cout << "Number of blocks accessed: " << disk.getNumBlocksAccessed()/10 << std::endl;
 
     int numNodesDeleted = 0;
     int numNodesUpdated = 0;
