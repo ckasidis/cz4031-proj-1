@@ -12,7 +12,6 @@
 #include <algorithm>
 #include <math.h>
 #include <inttypes.h>
-#include <chrono>
 
 int BLOCKSIZE = 200;
 int DISK_CAPACITY = 500000000;
